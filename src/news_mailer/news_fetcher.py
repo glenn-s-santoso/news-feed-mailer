@@ -46,7 +46,6 @@ def fetch_latest_news(page_size_per_topic: int = 3, language: str = "en") -> Lis
             )
             resp.raise_for_status()
             for art in resp.json().get("articles", []):
-                art["_topic"] = topic
                 all_articles.append(art)
         except Exception as exc:
             logger.warning("Topic '%s' fetch failed: %s", topic, exc)

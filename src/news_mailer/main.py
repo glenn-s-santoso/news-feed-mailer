@@ -9,7 +9,7 @@ logger = get_logger(__name__)
 def run() -> None:
     """Orchestrate the pipeline: fetch news -> compose email -> send."""
     try:
-        articles = fetch_latest_news()
+        articles = fetch_latest_news(page_size_per_topic=5)
         if not articles:
             logger.warning("No articles fetched; aborting email send.")
             return
