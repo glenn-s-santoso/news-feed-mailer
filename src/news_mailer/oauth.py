@@ -25,9 +25,8 @@ def load_user_credentials() -> Credentials | None:
     """
     creds: Credentials | None = None
 
-    # 1. Load cached token if present
     if TOKEN_FILE.exists():
-        creds = Credentials.from_authorized_user_file(str(TOKEN_FILE), SCOPES)  # type: ignore[arg-type]
+        creds = Credentials.from_authorized_user_file(str(TOKEN_FILE), SCOPES)
         if creds and creds.valid and not creds.expired:
             return creds
         if creds and creds.expired and creds.refresh_token:
@@ -36,9 +35,8 @@ def load_user_credentials() -> Credentials | None:
                 TOKEN_FILE.write_text(creds.to_json())
                 return creds
             except GoogleAuthError:
-                creds = None  # refresh failed, fall back to new flow
+                creds = None
 
-    # 2. Environment variables (non-interactive, e.g. CI)
     env_refresh = os.getenv("GOOGLE_REFRESH_TOKEN")
     env_client_id = os.getenv("GOOGLE_CLIENT_ID")
     env_client_secret = os.getenv("GOOGLE_CLIENT_SECRET")
@@ -57,12 +55,10 @@ def load_user_credentials() -> Credentials | None:
             return None
         return creds
 
-    # 3. Start installed-app flow if client secrets available (interactive)
     if CLIENT_SECRETS.exists():
         flow = InstalledAppFlow.from_client_secrets_file(str(CLIENT_SECRETS), SCOPES)
         creds = flow.run_local_server(port=0)
         TOKEN_FILE.write_text(creds.to_json())
         return creds
 
-    # 4. Nothing available
     return None

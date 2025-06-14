@@ -17,7 +17,6 @@ class Settings(BaseSettings):
     gmail_service_account_file: str | None = Field(
         None, env="GMAIL_SERVICE_ACCOUNT_FILE"
     )
-    gmail_delegated_user: str | None = Field(None, env="GMAIL_DELEGATED_USER")
 
     class Config:
         env_file = ".env"

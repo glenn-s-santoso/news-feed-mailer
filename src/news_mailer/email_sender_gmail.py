@@ -18,10 +18,16 @@ SCOPES = ["https://www.googleapis.com/auth/gmail.send"]
 def send_email_gmail(
     subject: str, body: str, to_addresses: Sequence[str] | None = None
 ) -> None:
-    """Send email using Gmail API and a service account.
+    """Send an HTML email via the Gmail API.
 
-    The service account must be delegated to act on behalf of `gmail_delegated_user`.
-    See Google Workspace docs for setting up domain-wide delegation.
+    Credentials are resolved by :func:`load_user_credentials`, which supports two flows:
+    1. **User OAuth installed-app flow** – uses the `client_secrets.json` / `token.json` files or
+       the `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `GOOGLE_REFRESH_TOKEN` environment
+       variables.
+    2. **Service-account with domain-wide delegation** – enabled by setting
+       `GMAIL_SERVICE_ACCOUNT_FILE` and `GMAIL_DELEGATED_USER` in the environment.
+
+    If *to_addresses* is omitted the comma-separated `EMAIL_TO` addresses from settings are used.
     """
     settings = get_settings()
     creds = load_user_credentials()
