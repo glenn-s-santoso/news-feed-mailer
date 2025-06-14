@@ -86,7 +86,7 @@ class EmailComposer:
         )
         current_date_str = jakarta_now.strftime("%A, %B %d, %Y")
 
-        date_preface = f"Today's date is {current_date_str}. Use this exact date in the greeting WITHOUT additional styling. For any other components other than date, you are allowed to style it"
+        date_preface = f"Today's date in Jakarta is {current_date_str}. Use this exact date in the greeting WITHOUT additional styling. For any other components other than date, you are allowed to style it"
 
         prompt = date_preface + PROMPT_TEMPLATE.replace(
             "[INSERT_NEWS_ARTICLES_HERE]", news_block
