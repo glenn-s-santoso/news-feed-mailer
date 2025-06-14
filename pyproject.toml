@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "news-mailer"
+version = "0.1.0"
+description = "Generate and send a daily news-summary email using Google Gemini and NewsAPI."
+authors = ["Glenn Steven <glenn.s.santoso.dev@gmail.com>"]
+readme = "README.md"
+packages = [
+    { include = "news_mailer", from = "src" },
+]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<4.0"
+google-generativeai = "^0.5.4"
+newsapi-python = "^0.2.7"
+python-dotenv = "^1.0.0"
+pydantic = "^2.0"
+requests = "^2.0"
+google-api-python-client = "^2.172.0"
+google-auth = "^2.0"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^4.0.1"
+
+[tool.poetry.scripts]
+news-mailer = "news_mailer.main:run"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
