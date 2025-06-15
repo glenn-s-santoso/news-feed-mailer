@@ -1,7 +1,6 @@
-from .news_fetcher import fetch_latest_news
-from .email_composer import EmailComposer
-from .email_sender_gmail import send_email_gmail
-from .logger import get_logger
+from src.news_mailer.service.news import fetch_latest_news
+from src.news_mailer.service.mail import EmailComposer, send_email_gmail
+from src.news_mailer.utils import get_logger
 
 logger = get_logger(__name__)
 

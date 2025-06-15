@@ -1,15 +1,15 @@
 # Makefile – helper tasks for development / setup
 
-.PHONY: help venv uv poetry clean run pre-commit-install lint
+.PHONY: help venv uv poetry clean run pre-commit-install lint activate
+
+PYTHON ?= python
+VENV_DIR ?= .venv
 
 ifeq ($(OS),Windows_NT)
 VENV_PY := $(VENV_DIR)/Scripts/activate
 else
 VENV_PY := $(VENV_DIR)/bin/activate
 endif
-
-PYTHON ?= python
-VENV_DIR ?= .venv
 
 help:
 	@echo "Available targets:"
@@ -48,8 +48,8 @@ uv:
 poetry:
 	@echo "Installing project via Poetry ..."
 	$(PYTHON) -m pip install --upgrade poetry
-	poetry env activate
 	poetry install
+	poetry env activate
 
 # ------------------------------------------------------------------------------
 # Convenience targets
@@ -57,6 +57,17 @@ poetry:
 run:
 	@echo "Running news-mailer..."
 	$(PYTHON) -m src.news_mailer.main
+
+activate:
+ifeq ($(OS),Windows_NT)
+	@echo "Activate the virtual environment in PowerShell with:"
+	@echo "  .\\$(VENV_DIR)\\Scripts\\Activate.ps1"
+	@echo "or in cmd.exe with:"
+	@echo "  .\\$(VENV_DIR)\\Scripts\\activate.bat"
+else
+	@echo "Activating venv..."
+	. $(VENV_PY)
+endif
 
 pre-commit-install:
 	@echo "Installing pre-commit hooks..."

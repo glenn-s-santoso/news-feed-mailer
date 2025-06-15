@@ -3,9 +3,9 @@ import datetime
 
 import google.generativeai as genai
 
-from .config import get_settings
-from .logger import get_logger
-from .news_fetcher import TOPIC_QUERIES
+from src.news_mailer.config import get_settings
+from src.news_mailer.utils import get_logger
+from src.news_mailer.service.news import TOPIC_QUERIES
 
 logger = get_logger(__name__)
 
