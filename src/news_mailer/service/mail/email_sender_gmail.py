@@ -6,9 +6,9 @@ from typing import Sequence
 
 from googleapiclient.discovery import build
 
-from .config import get_settings
-from .logger import get_logger
-from .oauth import load_user_credentials
+from src.news_mailer.config import get_settings
+from src.news_mailer.utils import get_logger
+from src.news_mailer.service.auth import load_user_credentials
 
 logger = get_logger(__name__)
 

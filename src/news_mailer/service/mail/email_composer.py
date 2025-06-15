@@ -3,9 +3,9 @@ import datetime
 
 import google.generativeai as genai
 
-from .config import get_settings
-from .logger import get_logger
-from .news_fetcher import TOPIC_QUERIES
+from src.news_mailer.config import get_settings
+from src.news_mailer.utils import get_logger
+from src.news_mailer.service.news import TOPIC_QUERIES
 
 logger = get_logger(__name__)
 
@@ -33,14 +33,15 @@ The email should be structured with clear headings, subheadings, and bullet poin
 4.  **Section Header:** Use an `<h2>` for a section like "Let's break it down."
 5.  **Main News Stories (Numbered Sections):**
     * For each of the provided news articles, create a distinct section.
-    * Each section should start with an `<h3>` heading for the news item's title (e.g., "1. [News Title]").
+    * Each section should start with an `<h3>` heading for the news item's title followed by the citation tag in square brackets (e.g., "1. [News Title] [<a href='URL'>1</a>]").
     * Under each `<h3>`, use the following structure with `<p>` tags and inline styles:
         * `<p style="font-weight: bold;">What Happened:</p>`: A concise, one-sentence summary of the news event.
         * `<p style="font-weight: bold;">Simple Explanation:</p>`: Briefly explain the news in layman's terms, including any relevant background if necessary.
         * `<p style="font-weight: bold;">The Results:</p>`: State the immediate, concrete outcomes or data points from the news.
         * `<p style="font-weight: bold;">Why it Matters:</p>`: Explain the significance and broader implications of the news.
         * `<p style="font-weight: bold;">Simple Implication (If... Then...):</p>`: Provide a clear "if-then" statement to illustrate potential future impacts or market reactions.
-        * Conclude the section with a `<p>` relating the specific news to broader market movements (e.g., currency shifts, stock reactions).
+        * `<p style="font-weight: bold;">Expert Opinion:</p>`: Craft a single, rich paragraph (3–4 sentences) offering a nuanced expert perspective, addressing the news fully, challenging surface interpretations, and guiding how readers should think about its broader significance. Focus on substance over filler.
+        * Conclude the section with a `<p>` relating the specific news to broader market movements (e.g., currency shifts, stock reactions), ensuring any statistics or claims are followed by the appropriate citation tag, e.g. "[<a href='URL'>2</a>]".
 6.  **"All Eyes Are Now on Tomorrow" Section:**
     * Create a dedicated `<h3>` section for upcoming critical events.
     * List key events (e.g., economic reports, central bank meetings) using an unordered list (`<ul>`) where each `<li>` describes the event and its potential impact.
@@ -50,7 +51,7 @@ The email should be structured with clear headings, subheadings, and bullet poin
 **News Articles (for detailed analysis):**
 [INSERT_NEWS_ARTICLES_HERE]
 """
-
+MODEL_NAME = "gemini-2.5-flash-preview-05-20"
 
 class EmailComposer:
     """Compose email content using Gemini Pro 2.5."""
@@ -58,7 +59,7 @@ class EmailComposer:
     def __init__(self):
         settings = get_settings()
         genai.configure(api_key=settings.gemini_api_key)
-        self.model = genai.GenerativeModel("gemini-2.5-flash-preview-05-20")
+        self.model = genai.GenerativeModel(MODEL_NAME)
 
     def compose_email(self, articles: List[Dict]) -> Tuple[str, str]:
         """Generate email subject and body from a list of articles.
@@ -70,17 +71,16 @@ class EmailComposer:
             subject, body
         """
         news_lines = []
-        for article in articles:
+        for idx, article in enumerate(articles, start=1):
             snippet = article.get("content") or article.get("description") or ""
             snippet = snippet.strip()
             if len(snippet) > SNIPPET_CHARS:
                 snippet = snippet[:SNIPPET_CHARS].rstrip() + "…"
             news_lines.append(
-                f"- {article['title']}\n  {snippet}\n  {article['url']}\n"
+                f"- [{idx}] {article['title']}\n  {snippet}\n  {article['url']}\n"
             )
         news_block = "\n".join(news_lines)
 
-        # Current date in Asia/Jakarta (UTC+7)
         jakarta_now = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(
             hours=7
         )
@@ -95,19 +95,17 @@ class EmailComposer:
         response = self.model.generate_content(prompt)
         body = response.text.strip()
 
-        # Append sources list
         sources_html_lines = [
             "<hr>",
             '<p style="font-weight:bold;">Sources:</p>',
             "<ul>",
         ]
-        for art in articles:
-            url = art.get("url")
-            title = art.get("title", url)
-            sources_html_lines.append(f'<li><a href="{url}">{title}</a></li>')
+        for idx, article in enumerate(articles, start=1):
+            url = article.get("url")
+            title = article.get("title", url)
+            sources_html_lines.append(f'<li>[{idx}] <a href="{url}">{title}</a></li>')
         sources_html_lines.append("</ul>")
 
-        # Footer
         settings = get_settings()
         author_name = (
             getattr(settings, "author_name", None) or settings.email_from.split("@")[0]

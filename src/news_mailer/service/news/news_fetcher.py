@@ -1,8 +1,8 @@
 import requests
 from typing import List, Dict
 
-from .config import get_settings
-from .logger import get_logger
+from src.news_mailer.config import get_settings
+from src.news_mailer.utils import get_logger
 
 logger = get_logger(__name__)
 
