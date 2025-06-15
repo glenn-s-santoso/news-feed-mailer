@@ -21,6 +21,5 @@ def run() -> None:
         logger.exception("Unhandled exception: %s", exc)
         raise
 
-
 if __name__ == "__main__":
     run()
