@@ -97,7 +97,7 @@ There are two convenient ways:
 # This will append the line GOOGLE_REFRESH_TOKEN=... to your .env file
 python - <<'PY' >> .env
 from src.news_mailer.service.auth.oauth import load_user_credentials
-print(f'GOOGLE_REFRESH_TOKEN="{load_user_credentials().refresh_token}"')
+print(f'GOOGLE_REFRESH_TOKEN="{load_user_credentials().refresh_token if load_user_credentials() else ""}"')
 PY
 ```
 • The script opens a browser window asking you to grant *Gmail send* permission.  
