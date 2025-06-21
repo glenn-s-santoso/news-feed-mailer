@@ -10,6 +10,12 @@ from google.auth.exceptions import GoogleAuthError
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+from src.news_mailer.utils import get_logger
+
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
+logger = get_logger(__name__)
 
 SCOPES: Sequence[str] = ("https://www.googleapis.com/auth/gmail.send",)
 CLIENT_SECRETS = Path("client_secrets.json")
@@ -51,14 +57,25 @@ def load_user_credentials() -> Credentials | None:
         )
         try:
             creds.refresh(Request())
+            logger.info("Refreshed credentials successfully")
         except GoogleAuthError:
-            return None
+            logger.error("Failed to refresh credentials, refreshing user credentials")
+            return refresh_user_credentials()
         return creds
 
+    return None
+
+def refresh_user_credentials() -> Credentials | None:
     if CLIENT_SECRETS.exists():
         flow = InstalledAppFlow.from_client_secrets_file(str(CLIENT_SECRETS), SCOPES)
-        creds = flow.run_local_server(port=0)
+        creds = flow.run_local_server(
+            port=0,
+            access_type="offline",
+            prompt="consent",
+            include_granted_scopes="true",
+        )
         TOKEN_FILE.write_text(creds.to_json())
+        logger.info("Refreshed credentials successfully")
         return creds
-
+    logger.error("Failed to refresh credentials")
     return None
