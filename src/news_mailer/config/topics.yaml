@@ -1,0 +1,55 @@
+runs:
+  asia-am:
+    cron: "0 1 * * *"      # 08:00 UTC+7
+    region: asia
+    global_topics: [macroeconomy, geopolitics]
+    regional_topics: [commodities, stock_market, cryptocurrency, technology]
+
+  europe-pm:
+    cron: "0 9 * * *"      # 16:00 UTC+7
+    region: europe
+    global_topics: [macroeconomy, geopolitics]
+    regional_topics: [commodities, stock_market, cryptocurrency, technology]
+
+  us-night:
+    cron: "0 13 * * *"     # 20:00 UTC+7
+    region: us
+    global_topics: [macroeconomy, geopolitics]
+    regional_topics: [commodities, stock_market, cryptocurrency, technology]
+
+topics:
+  macroeconomy:
+    global:  "inflation OR GDP OR unemployment"
+    asia:    "Bank of Japan OR China CPI OR India GDP"
+    europe:  "ECB OR Euro-area inflation"
+    us:      "Federal Reserve OR US CPI"
+
+  geopolitics:
+    global:  "geopolitics OR geopolitical risk"
+    asia:    "South China Sea OR ASEAN summit"
+    europe:  "NATO OR EU sanctions"
+    us:      "State Department OR White House diplomacy"
+
+  commodities:
+    global:  "oil OR gold OR copper"
+    asia:    "iron ore China OR palm oil Malaysia"
+    europe:  "Brent crude OR European gas"
+    us:      "WTI crude OR corn futures"
+
+  stock_market:
+    global:  "global equities OR stock markets"
+    asia:    "Nikkei OR Hang Seng"
+    europe:  "FTSE OR DAX"
+    us:      "S&P 500 OR Dow Jones"
+
+  cryptocurrency:
+    global:  "bitcoin OR ethereum OR cryptocurrency"
+    asia:    "Binance Asia OR crypto Singapore"
+    europe:  "MiCA regulation OR crypto EU"
+    us:      "SEC crypto OR Coinbase"
+
+  technology:
+    global:  "artificial intelligence OR blockchain"
+    asia:    "Alibaba cloud OR Samsung AI"
+    europe:  "EU AI Act OR SAP AI"
+    us:      "OpenAI OR Silicon Valley AI"

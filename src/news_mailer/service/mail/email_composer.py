@@ -5,7 +5,7 @@ import google.generativeai as genai
 
 from src.news_mailer.config import get_settings
 from src.news_mailer.utils import get_logger
-from src.news_mailer.service.news import TOPIC_QUERIES
+from src.news_mailer.config.topic_loader import all_topic_queries
 
 logger = get_logger(__name__)
 
@@ -17,7 +17,7 @@ def _pretty_topic(key: str) -> str:
     )
 
 
-DISPLAY_TOPICS = ", ".join(_pretty_topic(k) for k in TOPIC_QUERIES.keys())
+DISPLAY_TOPICS = ", ".join(_pretty_topic(k) for k in all_topic_queries().keys())
 
 SNIPPET_CHARS = 400
 
