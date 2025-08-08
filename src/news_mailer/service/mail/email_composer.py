@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+from os import getenv
 from typing import List, Dict, Tuple
 import datetime
 
@@ -7,6 +9,7 @@ from src.news_mailer.config import get_settings
 from src.news_mailer.utils import get_logger
 from src.news_mailer.service.news import TOPIC_QUERIES
 
+load_dotenv()
 logger = get_logger(__name__)
 
 
@@ -16,6 +19,7 @@ def _pretty_topic(key: str) -> str:
         word.upper() if len(word) <= 3 else word.capitalize() for word in key.split("_")
     )
 
+REGION = getenv("REGION") if getenv("REGION") else "Global"
 
 DISPLAY_TOPICS = ", ".join(_pretty_topic(k) for k in TOPIC_QUERIES.keys())
 
@@ -117,5 +121,5 @@ class EmailComposer:
 
         body += "\n" + "\n".join(sources_html_lines) + "\n" + footer_html
 
-        subject = "Your Daily News Digest - " + current_date_str
+        subject = f"Your {REGION} Daily News Digest - {current_date_str}"
         return subject, body

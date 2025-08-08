@@ -1,9 +1,9 @@
-name: Send 08-AM Digest (Friend)
+name: Send Europe Market Digest
 
 on:
   schedule:
-    # 08:00 Asia/Jakarta → 01:00 UTC
-    - cron: "0 1 * * *"
+    # 15:00 Asia/Jakarta → 08:00 UTC
+    - cron: "0 8 * * *"
   workflow_dispatch:
 
 jobs:
@@ -23,13 +23,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run news mailer (08-AM)
+      - name: Run news mailer (Europe Market)
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          TOPIC_QUERIES: ${{ vars.EUROPE_TOPIC_QUERIES }}
+          REGION: "Europe"
           EMAIL_FROM: ${{ vars.EMAIL_FROM }}
-          EMAIL_TO: ${{ vars.EMAIL_TO_8AM }}
+          EMAIL_TO: ${{ vars.EMAIL_TO }}
         run: python -m src.news_mailer.main
