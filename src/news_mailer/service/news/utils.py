@@ -17,9 +17,8 @@ def try_or_return_default_topic_queries() -> dict[str, Any]:
         return TopicQueries(
             macroeconomy="inflation OR GDP OR unemployment OR macroeconomy",
             geopolitics="geopolitics OR geopolitical risk OR foreign policy",
-            us_stock_market="S&P 500 OR Dow Jones OR Nasdaq",
+            stock_market="S&P 500 OR Dow Jones OR Nasdaq OR FTSE OR Nikkei OR DAX OR Hang Seng",
             cryptocurrency="cryptocurrency OR bitcoin OR ethereum",
-            global_stock_markets="FTSE OR Nikkei OR DAX OR Hang Seng",
             commodities="oil OR gold OR copper OR commodity prices",
             technology="artificial intelligence OR generative AI OR open source AI OR blockchain technology",
         ).model_dump()
