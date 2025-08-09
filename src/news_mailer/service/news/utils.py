@@ -11,7 +11,6 @@ logger = get_logger(__name__)
 
 def try_or_return_default_topic_queries() -> dict[str, Any]:
     try:
-        print(getenv("TOPIC_QUERIES"))
         return TopicQueries(**json.loads(getenv("TOPIC_QUERIES"))).model_dump()
     except Exception as exc:
         logger.warning("Failed to parse TOPIC_QUERIES: %s\n%s", exc, "Returning default queries.")
