@@ -30,6 +30,8 @@ jobs:
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          BREVO_EMAIL_PROVIDER: ${{ secrets.BREVO_EMAIL_PROVIDER }}
           TOPIC_QUERIES: ${{ vars.ASIA_TOPIC_QUERIES }}
           REGION: "Asia"
           EMAIL_FROM: ${{ vars.EMAIL_FROM }}

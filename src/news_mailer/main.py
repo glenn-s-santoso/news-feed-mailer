@@ -1,5 +1,5 @@
 from src.news_mailer.service.news import fetch_latest_news
-from src.news_mailer.service.mail import EmailComposer, send_email_gmail
+from src.news_mailer.service.mail import EmailComposer, send_email_brevo
 from src.news_mailer.utils import get_logger
 
 logger = get_logger(__name__)
@@ -16,7 +16,7 @@ def run() -> None:
         composer = EmailComposer()
         subject, body = composer.compose_email(articles)
 
-        send_email_gmail(subject, body)
+        send_email_brevo(subject, body)
     except Exception as exc:
         logger.exception("Unhandled exception: %s", exc)
         raise
