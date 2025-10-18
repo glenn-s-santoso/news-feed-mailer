@@ -18,6 +18,9 @@ class Settings(BaseSettings):
         None, env="GMAIL_SERVICE_ACCOUNT_FILE"
     )
 
+    brevo_api_key: str | None = Field(None, env="BREVO_API_KEY")
+    brevo_email_provider: str | None = Field(None, env="BREVO_EMAIL_PROVIDER")
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

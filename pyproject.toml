@@ -19,6 +19,7 @@ google-api-python-client = "^2.172.0"
 google-auth = "^2.0"
 google-auth-oauthlib = "^1.2.2"
 pydantic-settings = "^2.10.1"
+brevo-python = "^1.2.0"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^4.0.1"
